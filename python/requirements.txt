@@ -1,0 +1,12 @@
+# Core dependencies
+sentence-transformers>=2.2.0
+numpy>=1.21.0
+
+# Default backend (ChromaDB - embedded)
+chromadb>=0.4.0
+
+# Optional backends (install as needed):
+# pip install vectordb-ai[pinecone]
+# pip install vectordb-ai[qdrant]
+# pip install vectordb-ai[elasticsearch]
+# pip install vectordb-ai[all]  # All backends
