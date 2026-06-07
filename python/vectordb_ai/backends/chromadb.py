@@ -8,7 +8,7 @@ from typing import List, Dict, Optional
 import chromadb
 from chromadb.config import Settings
 
-from knowledge_forge.store.base import VectorStore, ContentChunk, Fact
+from vectordb_ai.base import VectorStore, ContentChunk, Fact
 
 
 class ChromaDBStore(VectorStore):

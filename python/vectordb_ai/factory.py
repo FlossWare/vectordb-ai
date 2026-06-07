@@ -5,7 +5,7 @@ Supports all major vector database backends.
 """
 
 from typing import Dict, Any
-from knowledge_forge.store.base import VectorStore
+from vectordb_ai.base import VectorStore
 
 
 class VectorStoreFactory:
@@ -73,57 +73,57 @@ def _register_all_backends():
 
     # Tier 1: Must Have
     try:
-        from knowledge_forge.store.chromadb import ChromaDBStore
+        from vectordb_ai.backends.chromadb import ChromaDBStore
         VectorStoreFactory.register('chromadb', ChromaDBStore)
     except ImportError:
         pass
 
     try:
-        from knowledge_forge.store.pinecone import PineconeStore
+        from vectordb_ai.backends.pinecone import PineconeStore
         VectorStoreFactory.register('pinecone', PineconeStore)
     except ImportError:
         pass
 
     try:
-        from knowledge_forge.store.qdrant import QdrantStore
+        from vectordb_ai.backends.qdrant import QdrantStore
         VectorStoreFactory.register('qdrant', QdrantStore)
     except ImportError:
         pass
 
     # Tier 2: Should Have
     try:
-        from knowledge_forge.store.elasticsearch import ElasticsearchStore
+        from vectordb_ai.backends.elasticsearch import ElasticsearchStore
         VectorStoreFactory.register('elasticsearch', ElasticsearchStore)
     except ImportError:
         pass
 
     try:
-        from knowledge_forge.store.solr import SolrStore
+        from vectordb_ai.backends.solr import SolrStore
         VectorStoreFactory.register('solr', SolrStore)
     except ImportError:
         pass
 
     try:
-        from knowledge_forge.store.weaviate import WeaviateStore
+        from vectordb_ai.backends.weaviate import WeaviateStore
         VectorStoreFactory.register('weaviate', WeaviateStore)
     except ImportError:
         pass
 
     # Tier 3: Nice to Have
     try:
-        from knowledge_forge.store.milvus import MilvusStore
+        from vectordb_ai.backends.milvus import MilvusStore
         VectorStoreFactory.register('milvus', MilvusStore)
     except ImportError:
         pass
 
     try:
-        from knowledge_forge.store.pgvector import PgVectorStore
+        from vectordb_ai.backends.pgvector import PgVectorStore
         VectorStoreFactory.register('pgvector', PgVectorStore)
     except ImportError:
         pass
 
     try:
-        from knowledge_forge.store.redis import RedisStore
+        from vectordb_ai.backends.redis import RedisStore
         VectorStoreFactory.register('redis', RedisStore)
     except ImportError:
         pass
