@@ -92,10 +92,31 @@ jobs:
           pip install build twine
           python -m build
 
-      - name: Publish to PyPI (if configured)
-        if: env.PYPI_TOKEN != ''
+      - name: Publish to PyPI
+        if: secrets.PYPI_TOKEN != ''
         env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: |
           cd python
-          python -m twine upload -u __token__ -p ${{ secrets.PYPI_TOKEN }} dist/*
+          python -m twine upload dist/* --skip-existing
+
+      - name: Publish to packagecloud.io
+        if: secrets.PACKAGECLOUD_TOKEN != ''
+        run: |
+          cd python
+          pip install packagecloud
+          export PACKAGECLOUD_TOKEN=${{ secrets.PACKAGECLOUD_TOKEN }}
+          package_cloud push FlossWare/releases/python dist/*.whl
+          package_cloud push FlossWare/releases/python dist/*.tar.gz
+
+      - name: Publish to GitHub Packages
+        if: secrets.GITHUB_TOKEN != ''
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          TWINE_REPOSITORY_URL: https://upload.pypi.org/legacy/
+        run: |
+          cd python
+          # GitHub Packages uses same format as PyPI
+          python -m twine upload --repository-url https://upload.pypi.org/legacy/ dist/* --skip-existing || true

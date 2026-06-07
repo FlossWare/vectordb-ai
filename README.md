@@ -89,6 +89,7 @@ store.import_from('data.json')
 
 ## Installation
 
+### From PyPI (Recommended)
 ```bash
 # Basic (ChromaDB only)
 pip install vectordb-ai
@@ -99,6 +100,23 @@ pip install vectordb-ai[qdrant]
 
 # All backends
 pip install vectordb-ai[all]
+```
+
+### From packagecloud.io (Enterprise)
+```bash
+pip install --index-url https://packagecloud.io/FlossWare/releases/pypi/simple vectordb-ai
+```
+
+### From GitHub (Latest)
+```bash
+pip install git+https://github.com/FlossWare/vectordb-ai.git
+```
+
+### For Development
+```bash
+git clone https://github.com/FlossWare/vectordb-ai.git
+cd vectordb-ai/python
+pip install -e .
 ```
 
 ## Part of FlossWare AI
