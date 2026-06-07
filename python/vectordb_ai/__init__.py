@@ -5,7 +5,7 @@ Switch between vector databases without changing code.
 No vendor lock-in. Portable data format.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1"
 __author__ = "FlossWare (sfloess)"
 __license__ = "GPL-3.0"
 

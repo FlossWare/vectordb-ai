@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="vectordb-ai",
-    version="0.1.0",
+    version="0.1",
     author="FlossWare (sfloess)",
     description="Universal vector database adapter for AI applications",
     long_description=open("../README.md").read() if __file__ else "",
