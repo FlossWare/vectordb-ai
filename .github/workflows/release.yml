@@ -92,6 +92,49 @@ jobs:
           pip install build twine
           python -m build
 
+      - name: Install FPM for native packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby ruby-dev rubygems build-essential rpm
+          sudo gem install --no-document fpm
+
+      - name: Build RPM package
+        run: |
+          cd python
+          VERSION="${{ steps.bump_version.outputs.new_version }}"
+          fpm -s python -t rpm \
+            --name python3-vectordb-ai \
+            --version "$VERSION" \
+            --python-bin python3 \
+            --python-package-name-prefix python3 \
+            --depends python3 \
+            --description "Universal vector database adapter for AI applications" \
+            --url "https://github.com/FlossWare/vectordb-ai" \
+            --license "GPL-3.0" \
+            --maintainer "FlossWare <noreply@flossware.org>" \
+            --vendor FlossWare \
+            setup.py
+          mkdir -p dist-native
+          mv *.rpm dist-native/
+
+      - name: Build DEB package
+        run: |
+          cd python
+          VERSION="${{ steps.bump_version.outputs.new_version }}"
+          fpm -s python -t deb \
+            --name python3-vectordb-ai \
+            --version "$VERSION" \
+            --python-bin python3 \
+            --python-package-name-prefix python3 \
+            --depends python3 \
+            --description "Universal vector database adapter for AI applications" \
+            --url "https://github.com/FlossWare/vectordb-ai" \
+            --license "GPL-3.0" \
+            --maintainer "FlossWare <noreply@flossware.org>" \
+            --vendor FlossWare \
+            setup.py
+          mv *.deb dist-native/
+
       - name: Publish to PyPI
         if: secrets.PYPI_TOKEN != ''
         env:
@@ -104,11 +147,26 @@ jobs:
       - name: Publish to packagecloud.io
         if: secrets.PACKAGECLOUD_TOKEN != ''
         run: |
-          cd python
           pip install packagecloud
           export PACKAGECLOUD_TOKEN=${{ secrets.PACKAGECLOUD_TOKEN }}
+
+          # Publish Python packages
+          cd python
           package_cloud push FlossWare/releases/python dist/*.whl
           package_cloud push FlossWare/releases/python dist/*.tar.gz
+
+          # Publish RPM packages
+          package_cloud push FlossWare/releases/el/8 dist-native/*.rpm
+          package_cloud push FlossWare/releases/el/9 dist-native/*.rpm
+          package_cloud push FlossWare/releases/fedora/39 dist-native/*.rpm
+          package_cloud push FlossWare/releases/fedora/40 dist-native/*.rpm
+
+          # Publish DEB packages
+          package_cloud push FlossWare/releases/ubuntu/focal dist-native/*.deb
+          package_cloud push FlossWare/releases/ubuntu/jammy dist-native/*.deb
+          package_cloud push FlossWare/releases/ubuntu/noble dist-native/*.deb
+          package_cloud push FlossWare/releases/debian/bullseye dist-native/*.deb
+          package_cloud push FlossWare/releases/debian/bookworm dist-native/*.deb
 
       - name: Publish to GitHub Packages
         if: secrets.GITHUB_TOKEN != ''
